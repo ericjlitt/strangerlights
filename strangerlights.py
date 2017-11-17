@@ -12,6 +12,7 @@
 import time
 import random
 from neopixel import *
+import os
 
 #Start up random seed
 random.seed()
@@ -21,7 +22,7 @@ LED_COUNT      = 50      # Number of LED pixels.
 LED_PIN        = 18      # GPIO pin connected to the pixels (must support PWM!).
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        = 5       # DMA channel to use for generating signal (try 5)
-LED_BRIGHTNESS = 255     # Set to 0 for darkest and 255 for brightest
+LED_BRIGHTNESS = 150     # Set to 0 for darkest and 255 for brightest
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 
 #Predefined Colors and Masks
@@ -49,7 +50,7 @@ GREENMASK = 0b000000001111111100000000
 BLUEMASK = 0b000000000000000011111111
 
 # Other vars
-ALPHABET = '*******abcdefghijklm********zyxwvutsrqpon*********'  #alphabet that will be used
+ALPHABET = '**a*b*cd*e*fg**h**q*po*nm*l*k*j*i***rs*t*u*vw*xy*z'  #alphabet that will be used
 LIGHTSHIFT = 0  #shift the lights down the strand to the other end 
 FLICKERLOOP = 3  #number of loops to flicker
 
@@ -209,10 +210,15 @@ if __name__ == '__main__':
 	# Intialize the library (must be called once before other functions).
   strip.begin()
 
-  print ('Press Ctrl-C to quit.')
+  #print ('Type q to quit.')
 
-
-  while True:
+  os.system('clear')
+  print "Type your message (q to quit) and press Enter:"
+  userInput = raw_input()
+  if not userInput:
+    userInput = 'its here'
+  while userInput != 'q' :
+    os.system('clear')
 
     ##Initialize all LEDs
     #for i in range(len(ALPHABET)):
@@ -222,7 +228,7 @@ if __name__ == '__main__':
     #initialize all the lights
     initLights(strip)
     
-    time.sleep(random.randint(5,15))
+    time.sleep(random.randint(3,10))
 
     #flicker each light, no delay between each
     for i in range(20):
@@ -232,7 +238,8 @@ if __name__ == '__main__':
     time.sleep(2)
 
     #flash lights to word
-    word = 'its here'
+    word = userInput.lower()
+    #word = 'abcdefghijklmnopqrstuvwxyzabcxyzabcdefghijklmnopqrstuvwxyz'
     blinkWords(strip, word)
     runBlink(strip)
     time.sleep(1)
@@ -248,3 +255,12 @@ if __name__ == '__main__':
       strip.setPixelColor(s[i]+LIGHTSHIFT, COLORS[s[i]%colorLen])
       strip.show()
       time.sleep(random.randint(10,80)/1000.0)
+    print "Type your message (q to quit) and press Enter:"
+    userInput = raw_input()
+    if not userInput:
+      userInput = word
+word = ' '
+blinkWords(strip, word)
+print 'sleep tight...'
+time.sleep(2)
+os.system('clear')
